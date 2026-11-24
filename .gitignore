@@ -5,3 +5,6 @@ target/
 __MACOSX/
 *.iml
 *.docx
+
+# Browser-generated screenshot resources
+screenshots/*_files/
