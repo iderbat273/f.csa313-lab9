@@ -296,3 +296,66 @@ Branch болон Line хамралт аль хэдийн 100% байсан ту
 
 - [Maven verify C](results/mvn-verify-C.txt)
 - [JaCoCo C CSV](results/jacoco-C.csv)
+
+## 8. Хэсэг D — 100% хамралттай кодын зааг утгын алдаа
+
+### 8.1. Зааг утгын тестүүд
+
+Хэсэг B болон C-д Branch, Line хамралт 100% болсон
+боловч кодын зөв ажиллагааг бүрэн батлахгүй.
+Иймээс letterGrade() функцийн спецификацид үндэслэн
+долоон зааг утгын тест нэмсэн.
+
+| Тестийн метод | Оролт | Expected | Actual (засварын өмнө) | Үр дүн |
+|---|---:|---|---|---|
+| letterGradeBoundary60ReturnsD | 60 | D | F | FAIL |
+| letterGradeBoundary5999ReturnsF | 59.99 | F | F | PASS |
+| letterGradeBoundary6999ReturnsD | 69.99 | D | D | PASS |
+| letterGradeBoundary0ReturnsF | 0 | F | F | PASS |
+| letterGradeBoundary100ReturnsA | 100 | A | A | PASS |
+| letterGradeBoundary8999ReturnsB | 89.99 | B | B | PASS |
+| letterGradeBoundary90ReturnsA | 90 | A | A | PASS |
+
+### 8.2. Алдаа илрүүлсэн туршилтын үр дүн
+
+- Tests run: 28
+- Passed: 27
+- Failures: 1
+- Errors: 0
+- Skipped: 0
+- Maven exit code: 1
+- BUILD FAILURE
+
+Унасан тест: `letterGradeBoundary60ReturnsD`.
+
+results/mvn-test-D-fail.txt файлаас авсан бодит алдааны мөр:
+
+```text
+[ERROR]   ScholarshipCalculatorTest.letterGradeBoundary60ReturnsD:185 expected: <D> but was: <F>
+```
+
+Surefire XML тайлангаар нийт 28 тестээс зөвхөн
+letterGradeBoundary60ReturnsD тест унасныг баталгаажуулсан.
+
+Энэ нь Maven тохиргооны алдаа биш, expected болон
+actual утгын зөрүүнээс үүссэн assertion failure юм.
+
+### 8.3. Алдааны үндсэн шалтгаан
+
+ScholarshipCalculator.java файлын 26-р мөр:
+
+```java
+if (score > 60)  return "D";
+```
+
+Спецификацийн дагуу 60 оноо D байх ёстой.
+Гэвч score > 60 нөхцөл нь яг 60 оноог False
+салаа руу шилжүүлж, F дүн буцааж байна.
+
+Өмнөх 55 болон 65 онооны тестүүд True, False
+салааг бүрэн хамруулсан боловч яг 60 гэсэн
+зааг утгыг шалгаагүй байсан.
+
+### 8.4. Алдаа илрүүлэлтийн нотолгоо
+
+- [Maven boundary failure log](results/mvn-test-D-fail.txt)

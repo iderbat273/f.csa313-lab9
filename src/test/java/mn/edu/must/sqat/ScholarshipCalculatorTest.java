@@ -177,4 +177,41 @@ class ScholarshipCalculatorTest {
                 0.0001
         );
     }
+
+    // Part D: Boundary value tests
+
+    @Test
+    void letterGradeBoundary60ReturnsD() {
+        assertEquals("D", calculator.letterGrade(60));
+    }
+
+    @Test
+    void letterGradeBoundary5999ReturnsF() {
+        assertEquals("F", calculator.letterGrade(59.99));
+    }
+
+    @Test
+    void letterGradeBoundary6999ReturnsD() {
+        assertEquals("D", calculator.letterGrade(69.99));
+    }
+
+    @Test
+    void letterGradeBoundary0ReturnsF() {
+        assertEquals("F", calculator.letterGrade(0));
+    }
+
+    @Test
+    void letterGradeBoundary100ReturnsA() {
+        assertEquals("A", calculator.letterGrade(100));
+    }
+
+    @Test
+    void letterGradeBoundary8999ReturnsB() {
+        assertEquals("B", calculator.letterGrade(89.99));
+    }
+
+    @Test
+    void letterGradeBoundary90ReturnsA() {
+        assertEquals("A", calculator.letterGrade(90));
+    }
 }
