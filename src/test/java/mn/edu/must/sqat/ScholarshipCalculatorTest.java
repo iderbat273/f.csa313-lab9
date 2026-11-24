@@ -155,4 +155,26 @@ class ScholarshipCalculatorTest {
                 calculator.scholarship(2.9, 16, false)
         );
     }
+
+    // Part C: Loop boundary tests
+    // Zero iterations and null input:
+    // gpaRejectsEmptyArray and gpaRejectsNullArray.
+
+    @Test
+    void gpaSingleScoreReturnsFour() {
+        assertEquals(
+                4.0,
+                calculator.gpa(new double[]{95}),
+                0.0001
+        );
+    }
+
+    @Test
+    void gpaFourScoresReturnsAverage() {
+        assertEquals(
+                2.5,
+                calculator.gpa(new double[]{95, 85, 75, 65}),
+                0.0001
+        );
+    }
 }
