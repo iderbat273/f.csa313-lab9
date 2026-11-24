@@ -473,3 +473,104 @@ CFG зургийг draw.io ашиглан өөрөө зурж, AI-ийн
 README-ийн хамралтын хувь, тестийн тоо,
 алдааны мөр болон commit мэдээллийг бодит
 гаралттай тулгаж баталгаажуулсан.
+
+## 12. Нэмэлт даалгавар — Coverage gate ба GitHub Actions CI
+
+### 12.1. Coverage gate тохиргоо
+
+pom.xml файлд JaCoCo 0.8.12 plugin-ийн check
+execution нэмсэн.
+
+| Тохиргоо | Утга |
+|---|---|
+| Goal | check |
+| Phase | verify |
+| Element | CLASS |
+| Counter | BRANCH |
+| Value | COVEREDRATIO |
+| Minimum | 0.90 |
+
+Класс тус бүрийн Branch coverage 90%-иас доош
+байвал Maven build амжилтгүй болох дүрэм тохируулсан.
+
+### 12.2. Эерэг туршилт
+
+Эцсийн 28 тестийг mvn clean verify командаар ажиллуулсан.
+
+- Tests run: 28
+- Failures: 0
+- Errors: 0
+- Skipped: 0
+- Branch coverage: 100%
+- All coverage checks have been met.
+- BUILD SUCCESS
+- Maven exit code: 0
+
+### 12.3. Сөрөг туршилт
+
+95e4543 commit дахь Хэсэг A-ийн starter код болон
+5 happy path тестийг git archive ашиглан тусдаа
+түр хавтсанд задалсан.
+Coverage gate тохируулсан pom.xml файлыг хуулж,
+mvn clean verify ажиллуулсан.
+
+- Tests run: 5
+- Failures: 0
+- Errors: 0
+- Skipped: 0
+- BUILD FAILURE
+- Maven exit code: 1
+
+JaCoCo-ийн бодит warning:
+
+    Rule violated for class mn.edu.must.sqat.ScholarshipCalculator: branches covered ratio is 0.53, but expected minimum is 0.90
+
+Хэсэг A-ийн CSV тайлан дахь Branch coverage
+22/41 буюу 53.66% байсан.
+Бүх JUnit тест амжилттай болсон боловч coverage
+gate-ийн шаардлага хангаагүй тул build унасан.
+
+Сөрөг туршилтыг тусдаа түр хавтсанд гүйцэтгэсэн
+учраас үндсэн төслийн зассан эх код болон 28 тест
+өөрчлөгдөөгүй.
+
+### 12.4. Туршилтын харьцуулалт
+
+| Үзүүлэлт | Positive | Negative |
+|---|---:|---:|
+| Tests run | 28 | 5 |
+| Test failures | 0 | 0 |
+| Branch coverage | 100% | 53.66% |
+| Coverage minimum | 90% | 90% |
+| Build result | SUCCESS | FAILURE |
+| Maven exit code | 0 | 1 |
+
+### 12.5. GitHub Actions CI
+
+.github/workflows/ci.yml файлд CI workflow тохируулсан.
+
+Workflow нь main branch-д push хийх, main branch
+руу pull request үүсгэх болон гараар эхлүүлэх
+тохиолдолд ажиллахаар тохируулагдсан.
+
+CI нь Ubuntu орчинд Temurin Java 21 ашиглан
+mvn clean verify ажиллуулж, JUnit тест болон
+JaCoCo coverage gate-ийг шалгана.
+JaCoCo HTML, CSV, XML тайланг workflow artifact
+хэлбэрээр хадгалахаар тохируулсан.
+
+### 12.6. Нэмэлт даалгаврын дүгнэлт
+
+Coverage gate нь кодын бүтцийн хамралт тогтоосон
+доод хэмжээнээс буурахаас сэргийлэх автомат хяналт юм.
+Эерэг болон сөрөг туршилтаар уг дүрэм зөв
+ажиллаж байгааг баталгаажуулсан.
+Гэхдээ coverage gate амжилттай болсон нь код
+бүрэн зөв гэсэн баталгаа биш тул зааг утгын
+болон спецификацид суурилсан тестүүд шаардлагатай.
+
+### 12.7. Нотолгооны файлууд
+
+- [Coverage gate pass](results/mvn-gate-pass.txt)
+- [Coverage gate fail](results/mvn-gate-fail.txt)
+- [GitHub Actions workflow](.github/workflows/ci.yml)
